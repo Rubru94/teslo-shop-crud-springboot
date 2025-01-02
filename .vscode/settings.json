@@ -1,4 +1,11 @@
 {
   "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "maven.terminal.favorites": [
+    {
+      "alias": "run",
+      "command": "spring-boot:run",
+      "debug": false
+    }
+  ]
 }
