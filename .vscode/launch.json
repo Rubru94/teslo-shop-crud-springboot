@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-TesloShopApplication<teslo-shop>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.teslo.teslo_shop.TesloShopApplication",
+      "projectName": "teslo-shop",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
