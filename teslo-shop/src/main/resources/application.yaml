@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: teslo-shop
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      # https://stackoverflow.com/questions/42135114/how-does-spring-jpa-hibernate-ddl-auto-property-exactly-work-in-spring
+      # ddl-auto: <create | create-drop | update | validate | none>
+      ddl-auto: update # In development, it's often common to use update
+      # ddl-auto: none # In production, it's often highly recommended you use none
+    # properties:
+    #   hibernate:
+    #     dialect: org.hibernate.dialect.PostgreSQLDialect
