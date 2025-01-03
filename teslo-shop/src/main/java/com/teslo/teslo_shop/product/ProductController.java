@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teslo.teslo_shop.product.dto.ProductDto;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -17,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<Product> getProducts() {
+    public List<ProductDto> getProducts() {
         return this.service.getProducts();
     }
 
