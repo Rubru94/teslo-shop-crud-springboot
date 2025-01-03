@@ -19,9 +19,18 @@ public class ProductService {
         this.objectMapper = objectMapper;
     }
 
-    public List<ProductDto> getProducts() {
+    public List<ProductDto> findAll() {
         List<Product> products = this.repository.findAll();
-        return products.stream().map(product -> objectMapper.convertValue(product, ProductDto.class))
+        return products.stream().map(product -> this.mapToDto(product))
                 .collect(Collectors.toList());
+    }
+
+    public ProductDto create(Product product) {
+        this.repository.save(product);
+        return this.mapToDto(product);
+    }
+
+    private ProductDto mapToDto(Product product) {
+        return objectMapper.convertValue(product, ProductDto.class);
     }
 }

@@ -38,7 +38,7 @@ public class Product {
     private String slug;
 
     @Column(nullable = false, columnDefinition = "integer default 0")
-    private Integer stock;
+    private Integer stock = 0;
 
     private List<String> sizes;
 

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.product.dto.ProductDto;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,8 +21,13 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<ProductDto> getProducts() {
-        return this.service.getProducts();
+    public List<ProductDto> findAll() {
+        return this.service.findAll();
+    }
+
+    @PostMapping()
+    public ProductDto create(@RequestBody Product entity) {
+        return this.service.create(entity);
     }
 
 }
