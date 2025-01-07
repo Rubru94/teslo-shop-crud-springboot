@@ -22,11 +22,12 @@ public class Product {
     @Column(nullable = false, unique = true, length = 100)
     private String title;
 
-    /*
+    /**
      * @info
      * 
-     * Precision is the number of digits in a number.
-     * Scale is the number of digits to the right of the decimal point in a number
+     *       Precision is the number of digits in a number.
+     *       Scale is the number of digits to the right of the decimal point in a
+     *       number.
      */
     @Column(precision = 12, scale = 2)
     private BigDecimal price;

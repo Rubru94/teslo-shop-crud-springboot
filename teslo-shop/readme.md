@@ -42,6 +42,8 @@
 - [How to install Amazon Corretto 21 in Ubuntu 22.04 LTS with JAVA_HOME Environment Variable](https://www.youtube.com/watch?app=desktop&v=sY_9CwGSCJ0)
 - [Maven on Linux (Ubuntu)](https://www.digitalocean.com/community/tutorials/install-maven-linux-ubuntu#installing-maven-on-linux-ubuntu)
 - [Using Postgres Effectively in Spring Boot Applications](https://hackernoon.com/using-postgres-effectively-in-spring-boot-applications)
+- [Error Handling in Spring Boot with @ControllerAdvice](https://freedium.cfd/https://erkanyasun.medium.com/advanced-error-handling-in-spring-boot-with-controlleradvice-2526803890f9)
+- [Java Records: A Detailed Guide](https://freedium.cfd/https://erkanyasun.medium.com/understanding-java-records-a-detailed-guide-510ce4a1bc42)
 
 ---
 
