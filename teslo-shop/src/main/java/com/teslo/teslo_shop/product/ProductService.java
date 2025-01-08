@@ -1,7 +1,6 @@
 package com.teslo.teslo_shop.product;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,10 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.utils.StringUtil;
 import com.teslo.teslo_shop.product.dto.ProductDto;
+import com.teslo.teslo_shop.product.enums.ProductModelEnum;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 @Service
 public class ProductService {
@@ -27,6 +30,7 @@ public class ProductService {
     public ProductService(ProductRepository repository, ObjectMapper objectMapper) {
         this.repository = repository;
         this.objectMapper = objectMapper;
+
     }
 
     public List<ProductDto> findAll() {
@@ -37,16 +41,20 @@ public class ProductService {
 
     public ProductDto findOne(String term) {
 
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> cq = this.getQuery();
+        Root<Product> producRoot = cq.from(Product.class);
+
         Product product = null;
 
         if (StringUtil.isUUID(term))
             product = this.repository.findById(term).orElse(null);
         else {
-            String queryStr = "SELECT prod FROM Product prod " // LEFT JOIN FETCH prod.images LEFT JOIN FETCH prod.user
-                    + "WHERE UPPER(prod.title) = :title OR prod.slug = :slug";
-            TypedQuery<Product> query = entityManager.createQuery(queryStr, Product.class);
-            query.setParameter("title", term.toUpperCase());
-            query.setParameter("slug", term);
+
+            cq.where(cb.or(
+                    cb.equal(cb.upper(producRoot.get(ProductModelEnum.TITLE.str())), term.toUpperCase()),
+                    cb.equal(producRoot.get(ProductModelEnum.SLUG.str()), term)));
+            TypedQuery<Product> query = entityManager.createQuery(cq);
             product = query.getResultList().stream().findFirst().orElse(null);
         }
 
@@ -63,5 +71,33 @@ public class ProductService {
 
     private ProductDto mapToDto(Product product) {
         return objectMapper.convertValue(product, ProductDto.class);
+    }
+
+    private CriteriaQuery<Product> getQuery() {
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        Root<Product> producRoot = cq.from(Product.class);
+
+        /*
+         * Join<Product, ProductImage> productImageJoin =
+         * producRoot.join(ProductModelEnum.IMAGES.str(), JoinType.LEFT);
+         */
+        /*
+         * Join<Product, User> userJoin = producRoot.join(ProductModelEnum.USER.str(),
+         * JoinType.LEFT);
+         */
+
+        /*
+         * cq.multiselect(
+         * producRoot.get(ProductModelEnum.TITLE.str()),
+         * producRoot.get(ProductModelEnum.SLUG.str())
+         * // productImageJoin.get(ProductImageModelEnum.URL.str()),
+         * // userJoin.get(UserModelEnum.EMAIL.str())
+         * );
+         */
+        cq.select(producRoot.alias(ProductModelEnum.MAIN.str()));
+
+        return cq;
     }
 }
