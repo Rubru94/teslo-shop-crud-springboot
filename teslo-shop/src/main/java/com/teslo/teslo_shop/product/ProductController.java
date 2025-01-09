@@ -2,15 +2,16 @@ package com.teslo.teslo_shop.product;
 
 import java.util.List;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.product.dto.ProductDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/products")
@@ -34,7 +35,12 @@ public class ProductController {
 
     @PostMapping()
     public ProductDto create(@RequestBody Product entity) {
-        return this.service.create(entity);
+        return this.service.save(entity);
+    }
+
+    @PatchMapping("/{id}")
+    public ProductDto update(@PathVariable String id, @RequestBody Product entity) throws BadRequestException {
+        return this.service.update(id, entity);
     }
 
 }

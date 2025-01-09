@@ -6,10 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
 import com.teslo.teslo_shop.core.utils.StringUtil;
@@ -81,9 +83,28 @@ public class ProductService {
         return this.mapToDto(product);
     }
 
-    public ProductDto create(Product product) {
+    public ProductDto save(Product product) {
         this.repository.save(product);
         return this.mapToDto(product);
+    }
+
+    public ProductDto update(String id, Product newProduct) throws BadRequestException {
+
+        if (!StringUtil.isUUID(id))
+            throw new BadRequestException("Invalid UUID");
+
+        Product product = this.repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not found product with id: " + id));
+
+        /**
+         * @see
+         * 
+         *      Necessary that the class from which objects are instantiated has setters
+         *      of the attributes to be updated.
+         */
+        BeanUtils.copyProperties(newProduct, product, "id");
+
+        return this.save(product);
     }
 
     private ProductDto mapToDto(Product product) {
