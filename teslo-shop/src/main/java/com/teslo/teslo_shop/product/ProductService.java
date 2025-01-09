@@ -1,16 +1,19 @@
 package com.teslo.teslo_shop.product;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
+import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
 import com.teslo.teslo_shop.core.utils.StringUtil;
 import com.teslo.teslo_shop.product.dto.ProductDto;
 import com.teslo.teslo_shop.product.enums.ProductModelEnum;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -26,11 +29,20 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final ObjectMapper objectMapper;
+    private CriteriaHelper<Product> criteria;
 
     public ProductService(ProductRepository repository, ObjectMapper objectMapper) {
         this.repository = repository;
         this.objectMapper = objectMapper;
+    }
 
+    /**
+     * The {@code @PostConstruct} init method ensures that the {@code EntityManager}
+     * has been injected before initialising {@code criteria}
+     */
+    @PostConstruct
+    public void init() {
+        this.criteria = new CriteriaHelper<Product>(entityManager.getCriteriaBuilder(), Product.class);
     }
 
     public List<ProductDto> findAll() {
@@ -41,26 +53,24 @@ public class ProductService {
 
     public ProductDto findOne(String term) {
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaBuilder cb = criteria.cb();
         CriteriaQuery<Product> cq = this.getQuery();
-        Root<Product> producRoot = cq.from(Product.class);
+        Root<Product> root = criteria.root();
 
-        Product product = null;
+        Optional<Product> optProduct = Optional.empty();
 
         if (StringUtil.isUUID(term))
-            product = this.repository.findById(term).orElse(null);
+            optProduct = this.repository.findById(term);
         else {
-
             cq.where(cb.or(
-                    cb.equal(cb.upper(producRoot.get(ProductModelEnum.TITLE.str())), term.toUpperCase()),
-                    cb.equal(producRoot.get(ProductModelEnum.SLUG.str()), term)));
+                    cb.equal(cb.upper(root.get(ProductModelEnum.TITLE.str())), term.toUpperCase()),
+                    cb.equal(root.get(ProductModelEnum.SLUG.str()), term)));
             TypedQuery<Product> query = entityManager.createQuery(cq);
-            product = query.getResultList().stream().findFirst().orElse(null);
+            optProduct = query.getResultList().stream().findFirst();
         }
 
-        if (product == null)
-            throw new NotFoundException("Not found product with term(id, title or slug): " + term);
-
+        Product product = optProduct
+                .orElseThrow(() -> new NotFoundException("Not found product with term(id, title or slug): " + term));
         return this.mapToDto(product);
     }
 
@@ -75,28 +85,27 @@ public class ProductService {
 
     private CriteriaQuery<Product> getQuery() {
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
-        Root<Product> producRoot = cq.from(Product.class);
+        CriteriaQuery<Product> cq = this.criteria.cq();
+        Root<Product> root = criteria.root();
 
         /*
          * Join<Product, ProductImage> productImageJoin =
-         * producRoot.join(ProductModelEnum.IMAGES.str(), JoinType.LEFT);
+         * root.join(ProductModelEnum.IMAGES.str(), JoinType.LEFT);
          */
         /*
-         * Join<Product, User> userJoin = producRoot.join(ProductModelEnum.USER.str(),
+         * Join<Product, User> userJoin = root.join(ProductModelEnum.USER.str(),
          * JoinType.LEFT);
          */
 
         /*
          * cq.multiselect(
-         * producRoot.get(ProductModelEnum.TITLE.str()),
-         * producRoot.get(ProductModelEnum.SLUG.str())
+         * root.get(ProductModelEnum.TITLE.str()),
+         * root.get(ProductModelEnum.SLUG.str())
          * // productImageJoin.get(ProductImageModelEnum.URL.str()),
          * // userJoin.get(UserModelEnum.EMAIL.str())
          * );
          */
-        cq.select(producRoot.alias(ProductModelEnum.MAIN.str()));
+        cq.select(root.alias(ProductModelEnum.MAIN.str()));
 
         return cq;
     }
