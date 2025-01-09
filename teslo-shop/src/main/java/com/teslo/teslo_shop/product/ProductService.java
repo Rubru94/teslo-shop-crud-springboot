@@ -2,8 +2,11 @@ package com.teslo.teslo_shop.product;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,11 +27,13 @@ import jakarta.persistence.criteria.Root;
 @Service
 public class ProductService {
 
+    private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
+    private final ProductRepository repository;
+    private final ObjectMapper objectMapper;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final ProductRepository repository;
-    private final ObjectMapper objectMapper;
     private CriteriaHelper<Product> criteria;
 
     public ProductService(ProductRepository repository, ObjectMapper objectMapper) {
@@ -52,6 +57,8 @@ public class ProductService {
     }
 
     public ProductDto findOne(String term) {
+
+        LOGGER.log(Level.INFO, "findOne by term: \"" + term + "\"");
 
         CriteriaBuilder cb = criteria.cb();
         CriteriaQuery<Product> cq = this.getQuery();
