@@ -90,11 +90,7 @@ public class ProductService {
 
     public ProductDto update(String id, Product newProduct) throws BadRequestException {
 
-        if (!StringUtil.isUUID(id))
-            throw new BadRequestException("Invalid UUID");
-
-        Product product = this.repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Not found product with id: " + id));
+        Product product = this.getByUuid(id);
 
         /**
          * @see
@@ -105,6 +101,21 @@ public class ProductService {
         BeanUtils.copyProperties(newProduct, product, "id");
 
         return this.save(product);
+    }
+
+    public ProductDto delete(String id) {
+
+        Product product = this.getByUuid(id);
+        this.repository.delete(product);
+        return this.mapToDto(product);
+    }
+
+    private Product getByUuid(String id) {
+
+        if (!StringUtil.isUUID(id))
+            throw new BadRequestException("Invalid UUID");
+        return this.repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not found product with id: " + id));
     }
 
     private ProductDto mapToDto(Product product) {
