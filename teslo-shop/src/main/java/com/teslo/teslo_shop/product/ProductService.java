@@ -11,6 +11,7 @@ import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
@@ -52,9 +53,15 @@ public class ProductService {
         this.criteria = new CriteriaHelper<Product>(entityManager.getCriteriaBuilder(), Product.class);
     }
 
-    public List<ProductDto> findAll() {
-        List<Product> products = this.repository.findAll();
-        return products.stream().map(product -> this.mapToDto(product))
+    public List<ProductDto> findAll(PaginationDto paginationDto) {
+
+        CriteriaQuery<Product> cq = this.getQuery();
+        TypedQuery<Product> query = entityManager.createQuery(cq);
+
+        query.setFirstResult(paginationDto.getOffset())
+                .setMaxResults(paginationDto.getLimit());
+
+        return query.getResultList().stream().map(product -> this.mapToDto(product))
                 .collect(Collectors.toList());
     }
 

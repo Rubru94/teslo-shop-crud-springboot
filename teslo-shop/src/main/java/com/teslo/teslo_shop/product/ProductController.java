@@ -6,6 +6,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.product.dto.ProductDto;
 
 @RestController
@@ -26,9 +28,16 @@ public class ProductController {
         this.service = service;
     }
 
+    /*
+     * if we use @RequestParam instead of @ModelAttribute
+     * 
+     * @RequestParam(required = false) Integer limit,
+     * 
+     * @RequestParam(required = false) Integer offset
+     */
     @GetMapping()
-    public List<ProductDto> findAll() {
-        return this.service.findAll();
+    public List<ProductDto> findAll(@ModelAttribute PaginationDto paginationDto) {
+        return this.service.findAll(paginationDto);
     }
 
     @GetMapping("/{term}")
