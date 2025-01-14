@@ -91,8 +91,14 @@ public class ProductService {
     }
 
     public ProductDto save(Product product) {
-        this.repository.save(product);
-        return this.mapToDto(product);
+        Product savedProduct = this.repository.save(product);
+        return this.mapToDto(savedProduct);
+    }
+
+    public List<ProductDto> saveMultiple(List<Product> products) {
+        List<Product> savedProducts = this.repository.saveAll(products);
+        return savedProducts.stream().map(product -> this.mapToDto(product))
+                .collect(Collectors.toList());
     }
 
     public ProductDto update(String id, Product newProduct) throws BadRequestException {
@@ -115,6 +121,10 @@ public class ProductService {
         Product product = this.getByUuid(id);
         this.repository.delete(product);
         return this.mapToDto(product);
+    }
+
+    public void deleteAll() {
+        this.repository.deleteAllProducts();
     }
 
     private Product getByUuid(String id) {

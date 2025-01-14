@@ -14,6 +14,7 @@ public class ProductDto {
     private List<String> sizes;
     private String gender;
     private List<String> tags;
+    private String type;
 
     public ProductDto() {
     }
@@ -88,5 +89,13 @@ public class ProductDto {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

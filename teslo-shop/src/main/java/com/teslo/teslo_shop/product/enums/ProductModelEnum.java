@@ -10,7 +10,8 @@ public enum ProductModelEnum {
     STOCK("stock"),
     SIZES("sizes"),
     GENDER("gender"),
-    TAGS("tags");
+    TAGS("tags"),
+    TYPE("type");
 
     private String str;
 

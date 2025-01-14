@@ -47,6 +47,8 @@ public class Product {
 
     private List<String> tags;
 
+    private String type;
+
     public String getId() {
         return id;
     }
@@ -113,5 +115,13 @@ public class Product {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
