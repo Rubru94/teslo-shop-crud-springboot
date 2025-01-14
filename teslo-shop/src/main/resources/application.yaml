@@ -1,6 +1,9 @@
 server:
   port: ${SERVER_PORT}
 spring:
+  profiles:
+    active:
+      - ${STAGE}
   application:
     name: teslo-shop
   datasource:

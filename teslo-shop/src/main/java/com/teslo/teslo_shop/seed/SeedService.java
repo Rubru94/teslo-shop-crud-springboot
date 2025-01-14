@@ -1,13 +1,12 @@
 package com.teslo.teslo_shop.seed;
 
 import java.io.InputStream;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,7 @@ import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.product.Product;
 import com.teslo.teslo_shop.product.ProductService;
 
+@Profile("dev")
 @Service
 public class SeedService {
 
