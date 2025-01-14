@@ -17,6 +17,7 @@ import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
 import com.teslo.teslo_shop.core.utils.StringUtil;
 import com.teslo.teslo_shop.product.dto.ProductDto;
+import com.teslo.teslo_shop.product.entities.Product;
 import com.teslo.teslo_shop.product.enums.ProductModelEnum;
 
 import jakarta.annotation.PostConstruct;

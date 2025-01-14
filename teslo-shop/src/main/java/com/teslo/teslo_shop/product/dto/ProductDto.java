@@ -15,6 +15,7 @@ public class ProductDto {
     private String gender;
     private List<String> tags;
     private String type;
+    private List<ProductImageDto> images;
 
     public ProductDto() {
     }
@@ -97,5 +98,13 @@ public class ProductDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<ProductImageDto> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImageDto> images) {
+        this.images = images;
     }
 }

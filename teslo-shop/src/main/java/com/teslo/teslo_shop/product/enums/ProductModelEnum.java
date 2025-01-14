@@ -11,7 +11,9 @@ public enum ProductModelEnum {
     SIZES("sizes"),
     GENDER("gender"),
     TAGS("tags"),
-    TYPE("type");
+    TYPE("type"),
+    IMAGES("images"),
+    ;
 
     private String str;
 

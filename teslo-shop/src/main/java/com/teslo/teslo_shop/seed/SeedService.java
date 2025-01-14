@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
-import com.teslo.teslo_shop.product.Product;
 import com.teslo.teslo_shop.product.ProductService;
+import com.teslo.teslo_shop.product.entities.Product;
 
 @Profile("dev")
 @Service

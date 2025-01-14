@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.product.dto.ProductDto;
+import com.teslo.teslo_shop.product.entities.Product;
 
 @RestController
 @RequestMapping("/api/products")

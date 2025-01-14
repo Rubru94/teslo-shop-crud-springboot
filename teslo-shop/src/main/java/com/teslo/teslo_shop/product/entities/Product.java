@@ -1,13 +1,17 @@
-package com.teslo.teslo_shop.product;
+package com.teslo.teslo_shop.product.entities;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -48,6 +52,10 @@ public class Product {
     private List<String> tags;
 
     private String type;
+
+    @JsonManagedReference // two-way linkage between fields; its role is "parent" (or "forward") link.
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images;
 
     public String getId() {
         return id;
@@ -123,5 +131,13 @@ public class Product {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
     }
 }
