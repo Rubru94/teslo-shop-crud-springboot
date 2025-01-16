@@ -1,6 +1,7 @@
-package com.teslo.teslo_shop.product.entities;
+package com.teslo.teslo_shop.product.product_image;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.teslo.teslo_shop.product.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

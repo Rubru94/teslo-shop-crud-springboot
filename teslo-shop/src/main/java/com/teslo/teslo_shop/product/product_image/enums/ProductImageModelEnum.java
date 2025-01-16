@@ -1,4 +1,4 @@
-package com.teslo.teslo_shop.product.enums;
+package com.teslo.teslo_shop.product.product_image.enums;
 
 public enum ProductImageModelEnum {
     MAIN("prod_images"),

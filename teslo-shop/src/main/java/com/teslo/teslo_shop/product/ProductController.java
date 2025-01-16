@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.core.dto.PaginationDto;
-import com.teslo.teslo_shop.product.dto.ProductDto;
-import com.teslo.teslo_shop.product.entities.Product;
+import com.teslo.teslo_shop.product.dto.PlainProductDto;
 
 @RestController
 @RequestMapping("/api/products")
@@ -37,28 +37,28 @@ public class ProductController {
      * @RequestParam(required = false) Integer offset
      */
     @GetMapping()
-    public List<ProductDto> findAll(@ModelAttribute PaginationDto paginationDto) {
+    public List<PlainProductDto> findAll(@ModelAttribute PaginationDto paginationDto) {
         return this.service.findAll(paginationDto);
     }
 
     @GetMapping("/{term}")
-    public ProductDto findOne(@PathVariable(name = "term") String term) {
+    public PlainProductDto findOne(@PathVariable(name = "term") String term) {
         return this.service.findOne(term);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto create(@RequestBody Product entity) {
+    public PlainProductDto create(@RequestBody PlainProductDto entity) {
         return this.service.save(entity);
     }
 
     @PatchMapping("/{id}")
-    public ProductDto update(@PathVariable String id, @RequestBody Product entity) throws BadRequestException {
+    public PlainProductDto update(@PathVariable String id, @RequestBody Product entity) throws BadRequestException {
         return this.service.update(id, entity);
     }
 
     @DeleteMapping("{id}")
-    public ProductDto delete(@PathVariable String id) {
+    public PlainProductDto delete(@PathVariable String id) {
         return this.service.delete(id);
     }
 

@@ -1,9 +1,10 @@
-package com.teslo.teslo_shop.product.entities;
+package com.teslo.teslo_shop.product;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.teslo.teslo_shop.product.product_image.ProductImage;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

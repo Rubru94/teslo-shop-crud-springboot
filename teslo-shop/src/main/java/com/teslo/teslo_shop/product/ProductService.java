@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teslo.teslo_shop.core.dto.PaginationDto;
@@ -16,8 +17,8 @@ import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
 import com.teslo.teslo_shop.core.utils.StringUtil;
+import com.teslo.teslo_shop.product.dto.PlainProductDto;
 import com.teslo.teslo_shop.product.dto.ProductDto;
-import com.teslo.teslo_shop.product.entities.Product;
 import com.teslo.teslo_shop.product.enums.ProductModelEnum;
 
 import jakarta.annotation.PostConstruct;
@@ -28,6 +29,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
+@Transactional
 @Service
 public class ProductService {
 
@@ -54,7 +56,7 @@ public class ProductService {
         this.criteria = new CriteriaHelper<Product>(entityManager.getCriteriaBuilder(), Product.class);
     }
 
-    public List<ProductDto> findAll(PaginationDto paginationDto) {
+    public List<PlainProductDto> findAll(PaginationDto paginationDto) {
 
         CriteriaQuery<Product> cq = this.getQuery();
         TypedQuery<Product> query = entityManager.createQuery(cq);
@@ -66,7 +68,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDto findOne(String term) {
+    public PlainProductDto findOne(String term) {
 
         LOGGER.log(Level.INFO, "findOne by term: \"" + term + "\"");
 
@@ -91,18 +93,30 @@ public class ProductService {
         return this.mapToDto(product);
     }
 
-    public ProductDto save(Product product) {
+    public PlainProductDto save(Product product) {
         Product savedProduct = this.repository.save(product);
         return this.mapToDto(savedProduct);
     }
 
-    public List<ProductDto> saveMultiple(List<Product> products) {
+    public PlainProductDto save(PlainProductDto plainProductDto) {
+        /**
+         * @see
+         *      this conversion works because uses ProductImageDto(String url)
+         *      constructor
+         */
+        ProductDto productDto = objectMapper.convertValue(plainProductDto, ProductDto.class);
+        Product product = objectMapper.convertValue(productDto, Product.class);
+        Product savedProduct = this.repository.save(product);
+        return this.mapToDto(savedProduct);
+    }
+
+    public List<PlainProductDto> saveMultiple(List<Product> products) {
         List<Product> savedProducts = this.repository.saveAll(products);
         return savedProducts.stream().map(product -> this.mapToDto(product))
                 .collect(Collectors.toList());
     }
 
-    public ProductDto update(String id, Product newProduct) throws BadRequestException {
+    public PlainProductDto update(String id, Product newProduct) throws BadRequestException {
 
         Product product = this.getByUuid(id);
 
@@ -117,7 +131,7 @@ public class ProductService {
         return this.save(product);
     }
 
-    public ProductDto delete(String id) {
+    public PlainProductDto delete(String id) {
 
         Product product = this.getByUuid(id);
         this.repository.delete(product);
@@ -136,8 +150,9 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Not found product with id: " + id));
     }
 
-    private ProductDto mapToDto(Product product) {
-        return objectMapper.convertValue(product, ProductDto.class);
+    private PlainProductDto mapToDto(Product product) {
+        ProductDto productDto = objectMapper.convertValue(product, ProductDto.class);
+        return new PlainProductDto(productDto);
     }
 
     private CriteriaQuery<Product> getQuery() {

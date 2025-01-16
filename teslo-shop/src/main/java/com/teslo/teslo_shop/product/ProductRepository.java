@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.teslo.teslo_shop.product.entities.Product;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
 

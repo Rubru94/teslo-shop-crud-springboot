@@ -1,4 +1,4 @@
-package com.teslo.teslo_shop.product.dto;
+package com.teslo.teslo_shop.product.product_image.dto;
 
 public class ProductImageDto {
 
@@ -6,6 +6,10 @@ public class ProductImageDto {
     private String url;
 
     public ProductImageDto() {
+    }
+
+    public ProductImageDto(String url) {
+        this.url = url;
     }
 
     public String getId() {

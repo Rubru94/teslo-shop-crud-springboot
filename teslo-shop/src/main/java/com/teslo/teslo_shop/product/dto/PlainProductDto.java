@@ -1,11 +1,13 @@
 package com.teslo.teslo_shop.product.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.teslo.teslo_shop.product.product_image.dto.ProductImageDto;
 
-public class ProductDto {
+public class PlainProductDto {
 
     private String id;
     private String title;
@@ -17,17 +19,33 @@ public class ProductDto {
     private String gender;
     private List<String> tags;
     private String type;
-    private List<ProductImageDto> images;
+    private List<String> images;
 
-    public ProductDto() {
+    /**
+     * @see
+     *      · Jackson needs a default constructor for instantiating the class
+     */
+    public PlainProductDto() {
+        this.stock = 0;
+        this.images = new ArrayList<>();
+    }
+
+    public PlainProductDto(ProductDto productDto) {
+        this.id = productDto.getId();
+        this.title = productDto.getTitle();
+        this.price = productDto.getPrice();
+        this.description = productDto.getDescription();
+        this.slug = productDto.getSlug();
+        this.stock = productDto.getStock();
+        this.sizes = productDto.getSizes();
+        this.gender = productDto.getGender();
+        this.tags = productDto.getTags();
+        this.type = productDto.getType();
+        this.images = productDto.getImages().stream().map(ProductImageDto::getUrl).collect(Collectors.toList());
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -102,11 +120,11 @@ public class ProductDto {
         this.type = type;
     }
 
-    public List<ProductImageDto> getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(List<ProductImageDto> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 }
