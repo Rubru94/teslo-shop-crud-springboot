@@ -2,6 +2,7 @@ package com.teslo.teslo_shop.product;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teslo.teslo_shop.product.product_image.ProductImage;
@@ -140,5 +141,19 @@ public class Product {
 
     public void setImages(List<ProductImage> images) {
         this.images = images;
+    }
+
+    public void addImages(List<ProductImage> images) {
+        images.stream().forEach(image -> this.images.add(image));
+    }
+
+    public void subtractImages(List<ProductImage> images) {
+        images.stream().forEach(image -> this.images.remove(image));
+    }
+
+    public void subtractImagesByUrls(List<String> urls) {
+        List<ProductImage> images = this.images.stream()
+                .filter(image -> urls.contains(image.getUrl())).collect(Collectors.toList());
+        this.subtractImages(images);
     }
 }

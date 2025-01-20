@@ -53,7 +53,8 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public PlainProductDto update(@PathVariable String id, @RequestBody Product entity) throws BadRequestException {
+    public PlainProductDto update(@PathVariable String id, @RequestBody PlainProductDto entity)
+            throws BadRequestException {
         return this.service.update(id, entity);
     }
 

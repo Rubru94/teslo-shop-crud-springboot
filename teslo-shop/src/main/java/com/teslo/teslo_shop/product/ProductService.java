@@ -1,5 +1,6 @@
 package com.teslo.teslo_shop.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -20,6 +21,8 @@ import com.teslo.teslo_shop.core.utils.StringUtil;
 import com.teslo.teslo_shop.product.dto.PlainProductDto;
 import com.teslo.teslo_shop.product.dto.ProductDto;
 import com.teslo.teslo_shop.product.enums.ProductModelEnum;
+import com.teslo.teslo_shop.product.product_image.ProductImage;
+import com.teslo.teslo_shop.product.product_image.ProductImageService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -36,15 +39,18 @@ public class ProductService {
     private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
     private final ProductRepository repository;
     private final ObjectMapper objectMapper;
+    private final ProductImageService productImageService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private CriteriaHelper<Product> criteria;
 
-    public ProductService(ProductRepository repository, ObjectMapper objectMapper) {
+    public ProductService(ProductRepository repository, ObjectMapper objectMapper,
+            ProductImageService productImageService) {
         this.repository = repository;
         this.objectMapper = objectMapper;
+        this.productImageService = productImageService;
     }
 
     /**
@@ -110,13 +116,14 @@ public class ProductService {
         return this.mapToDto(savedProduct);
     }
 
+    // TODO: update handling images
     public List<PlainProductDto> saveMultiple(List<Product> products) {
         List<Product> savedProducts = this.repository.saveAll(products);
         return savedProducts.stream().map(product -> this.mapToDto(product))
                 .collect(Collectors.toList());
     }
 
-    public PlainProductDto update(String id, Product newProduct) throws BadRequestException {
+    public PlainProductDto update(String id, PlainProductDto newProduct) throws BadRequestException {
 
         Product product = this.getByUuid(id);
 
@@ -126,13 +133,40 @@ public class ProductService {
          *      Necessary that the class from which objects are instantiated has setters
          *      of the attributes to be updated.
          */
-        BeanUtils.copyProperties(newProduct, product, "id");
+        BeanUtils.copyProperties(newProduct, product, "id", "images");
+
+        List<String> newProductImagesUrls = newProduct.getImages() != null && !newProduct.getImages().isEmpty()
+                ? newProduct.getImages()
+                : new ArrayList<>();
+        List<String> productImagesUrls = this.productImageService.findByProductId(id).stream()
+                .map(image -> image.getUrl())
+                .collect(Collectors.toList());
+
+        List<String> toDeleteUrls = productImagesUrls.stream()
+                .filter(image -> !newProductImagesUrls.contains(image))
+                .collect(Collectors.toList());
+
+        List<String> toCreateUrls = newProductImagesUrls.stream()
+                .filter(image -> !productImagesUrls.contains(image))
+                .collect(Collectors.toList());
+
+        // delete old ones
+        this.productImageService.deleteByProductIdAndUrlIn(id, toDeleteUrls);
+        product.subtractImagesByUrls(toDeleteUrls);
+
+        // create new ones
+        List<ProductImage> newImages = toCreateUrls.stream().map(url -> {
+            ProductImage productImage = new ProductImage(url);
+            productImage.setProduct(product);
+            return productImage;
+        }).collect(Collectors.toList());
+        this.productImageService.saveMultiple(newImages);
+        product.addImages(newImages);
 
         return this.save(product);
     }
 
     public PlainProductDto delete(String id) {
-
         Product product = this.getByUuid(id);
         this.repository.delete(product);
         return this.mapToDto(product);
@@ -143,7 +177,6 @@ public class ProductService {
     }
 
     private Product getByUuid(String id) {
-
         if (!StringUtil.isUUID(id))
             throw new BadRequestException("Invalid UUID");
         return this.repository.findById(id)

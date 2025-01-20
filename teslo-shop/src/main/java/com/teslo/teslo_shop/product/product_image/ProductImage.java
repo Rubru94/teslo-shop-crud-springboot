@@ -18,7 +18,7 @@ public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @Column(columnDefinition = "TEXT")
     private String url;
@@ -28,7 +28,14 @@ public class ProductImage {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Integer getId() {
+    public ProductImage() {
+    }
+
+    public ProductImage(String url) {
+        this.url = url;
+    }
+
+    public Long getId() {
         return id;
     }
 
