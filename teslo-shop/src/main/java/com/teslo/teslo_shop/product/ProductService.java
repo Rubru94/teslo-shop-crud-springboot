@@ -116,7 +116,6 @@ public class ProductService {
         return this.mapToDto(savedProduct);
     }
 
-    // TODO: update handling images
     public List<PlainProductDto> saveMultiple(List<Product> products) {
         List<Product> savedProducts = this.repository.saveAll(products);
         return savedProducts.stream().map(product -> this.mapToDto(product))

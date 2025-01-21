@@ -1,6 +1,7 @@
 package com.teslo.teslo_shop.product;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,8 +57,8 @@ public class Product {
     private String type;
 
     @JsonManagedReference // two-way linkage between fields; its role is "parent" (or "forward") link.
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> images;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<ProductImage> images = new ArrayList<>();
 
     public String getId() {
         return id;

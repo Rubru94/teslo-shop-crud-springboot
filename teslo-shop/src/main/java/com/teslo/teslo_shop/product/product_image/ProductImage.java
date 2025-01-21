@@ -1,5 +1,8 @@
 package com.teslo.teslo_shop.product.product_image;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.teslo.teslo_shop.product.Product;
 
@@ -26,6 +29,7 @@ public class ProductImage {
     @JsonBackReference // two-way linkage between fields; its role is "child" (or "back") link.
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE) // Specifies an on delete action for a foreign key constraint.
     private Product product;
 
     public ProductImage() {
