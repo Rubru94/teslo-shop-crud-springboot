@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.teslo.teslo_shop.auth.entities.User;
 import com.teslo.teslo_shop.product.product_image.ProductImage;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +19,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -59,6 +66,13 @@ public class Product {
     @JsonManagedReference // two-way linkage between fields; its role is "parent" (or "forward") link.
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<ProductImage> images = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true) // TODO: nullable false. It is true at the beginning for create
+                                                   // column in table "products"
+    @OnDelete(action = OnDeleteAction.CASCADE) // Specifies an on delete action for a foreign key constraint.
+    private User user;
 
     public String getId() {
         return id;
@@ -156,5 +170,13 @@ public class Product {
         List<ProductImage> images = this.images.stream()
                 .filter(image -> urls.contains(image.getUrl())).collect(Collectors.toList());
         this.subtractImages(images);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
