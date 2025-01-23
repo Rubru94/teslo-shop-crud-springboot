@@ -2,7 +2,11 @@ package com.teslo.teslo_shop.auth.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teslo.teslo_shop.auth.dto.CreateUserDto;
@@ -21,7 +25,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User implements UserInterface {
+public class User implements UserInterface, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -113,5 +117,15 @@ public class User implements UserInterface {
     @Override
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
     }
 }

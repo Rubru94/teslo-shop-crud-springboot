@@ -45,6 +45,7 @@
 - [Error Handling in Spring Boot with @ControllerAdvice](https://freedium.cfd/https://erkanyasun.medium.com/advanced-error-handling-in-spring-boot-with-controlleradvice-2526803890f9)
 - [Java Records: A Detailed Guide](https://freedium.cfd/https://erkanyasun.medium.com/understanding-java-records-a-detailed-guide-510ce4a1bc42)
 - [Spring Boot - Profiles](./docs/spring-boot-profiles.md)
+- [Implement JWT authentication in a Spring Boot application](https://medium.com/@tericcabrel/implement-jwt-authentication-in-a-spring-boot-3-application-5839e4fd8fac)
 
 ---
 
