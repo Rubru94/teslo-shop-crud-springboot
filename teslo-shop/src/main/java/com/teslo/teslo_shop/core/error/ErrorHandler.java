@@ -9,6 +9,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
+import com.teslo.teslo_shop.core.error.exceptions.UnauthorizedException;
 
 @ControllerAdvice
 public class ErrorHandler {
@@ -21,6 +22,11 @@ public class ErrorHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> handleBadRequestException(Exception ex, WebRequest request) {
         return this.handleException(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(Exception ex, WebRequest request) {
+        return this.handleException(ex, request, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

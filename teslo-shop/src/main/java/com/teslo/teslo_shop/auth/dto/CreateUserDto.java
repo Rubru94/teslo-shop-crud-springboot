@@ -1,35 +1,40 @@
 package com.teslo.teslo_shop.auth.dto;
 
+import com.teslo.teslo_shop.auth.entities.User;
+
 public class CreateUserDto {
 
-    private String email;
-    private String password;
-    private String fullName;
+    private User user;
 
     public CreateUserDto() {
+        this.user = new User();
+    }
+
+    public CreateUserDto(User user) {
+        this.user = user;
     }
 
     public String getEmail() {
-        return email;
+        return user.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        user.setEmail(email);
     }
 
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        user.setPassword(password);
     }
 
     public String getFullName() {
-        return fullName;
+        return user.getFullName();
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        user.setFullName(fullName);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.auth.dto.AuthenticatedUserDto;
 import com.teslo.teslo_shop.auth.dto.CreateUserDto;
+import com.teslo.teslo_shop.auth.dto.LoginUserDto;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,4 +27,8 @@ public class AuthController {
         return this.service.registerUser(entity);
     }
 
+    @PostMapping("login")
+    public AuthenticatedUserDto login(@RequestBody LoginUserDto entity) {
+        return this.service.login(entity);
+    }
 }

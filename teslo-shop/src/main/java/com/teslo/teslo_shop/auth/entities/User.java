@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.teslo.teslo_shop.auth.dto.CreateUserDto;
 import com.teslo.teslo_shop.auth.enums.ValidRoles;
+import com.teslo.teslo_shop.auth.interfaces.UserInterface;
 import com.teslo.teslo_shop.product.Product;
 
 import jakarta.persistence.CascadeType;
@@ -19,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,14 +43,26 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Product> products = new ArrayList<>();
 
+    public User() {
+    }
+
+    public User(CreateUserDto createUserDto) {
+        this();
+        this.setEmail(createUserDto.getEmail());
+        this.setFullName(createUserDto.getFullName());
+        this.setPassword(createUserDto.getPassword());
+    }
+
     public String getId() {
         return id;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public void setEmail(String email) {
         this.email = email;
     }
@@ -61,34 +75,42 @@ public class User {
         this.password = password;
     }
 
+    @Override
     public String getFullName() {
         return fullName;
     }
 
+    @Override
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
+    @Override
     public Boolean isActive() {
         return isActive;
     }
 
+    @Override
     public void setActive(Boolean isActive) {
         this.isActive = isActive;
     }
 
+    @Override
     public List<String> getRoles() {
         return roles;
     }
 
+    @Override
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 
+    @Override
     public List<Product> getProducts() {
         return this.products;
     }
 
+    @Override
     public void setProducts(List<Product> products) {
         this.products = products;
     }
