@@ -1,5 +1,8 @@
 package com.teslo.teslo_shop.auth;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,11 +42,15 @@ public class AuthService {
     }
 
     public AuthenticatedUserDto registerUser(CreateUserDto createUserDto) {
-        User user = new User(createUserDto);
-        user.setPassword(this.encodePassword(createUserDto.getPassword()));
+        User user = this.createUser(createUserDto);
         this.userRepository.save(user);
         return new AuthenticatedUserDto(user, this.getJwtToken(user),
                 this.jwtService.getExpirationTime());
+    }
+
+    public List<User> registerMultiple(List<CreateUserDto> users) {
+        return this.userRepository
+                .saveAll(users.stream().map(user -> this.createUser(user)).collect(Collectors.toList()));
     }
 
     public AuthenticatedUserDto login(LoginUserDto loginUserDto) {
@@ -77,7 +84,18 @@ public class AuthService {
         return (User) authentication.getPrincipal();
     }
 
+    public void deleteAllUsers() {
+        this.userRepository.deleteAllUsers();
+    }
+
     private String getJwtToken(User user) {
         return this.jwtService.generateToken(user);
     }
+
+    private User createUser(CreateUserDto createUserDto) {
+        User user = new User(createUserDto);
+        user.setPassword(this.encodePassword(createUserDto.getPassword()));
+        return user;
+    }
+
 }

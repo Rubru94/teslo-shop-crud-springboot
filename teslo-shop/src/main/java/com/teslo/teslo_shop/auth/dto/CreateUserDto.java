@@ -1,5 +1,7 @@
 package com.teslo.teslo_shop.auth.dto;
 
+import java.util.List;
+
 import com.teslo.teslo_shop.auth.entities.User;
 
 public class CreateUserDto {
@@ -40,5 +42,13 @@ public class CreateUserDto {
 
     public void setFullName(String fullName) {
         user.setFullName(fullName);
+    }
+
+    public List<String> getRoles() {
+        return user.getRoles();
+    }
+
+    public void setRoles(List<String> roles) {
+        user.setRoles(roles);
     }
 }

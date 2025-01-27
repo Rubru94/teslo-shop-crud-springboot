@@ -55,6 +55,7 @@ public class User implements UserInterface, UserDetails {
         this.setEmail(createUserDto.getEmail());
         this.setFullName(createUserDto.getFullName());
         this.setPassword(createUserDto.getPassword());
+        this.setRoles(createUserDto.getRoles());
     }
 
     public String getId() {

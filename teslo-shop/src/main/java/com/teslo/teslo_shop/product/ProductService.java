@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teslo.teslo_shop.auth.entities.User;
 import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.helpers.CriteriaHelper;
+import com.teslo.teslo_shop.core.utils.MathUtil;
 import com.teslo.teslo_shop.core.utils.StringUtil;
 import com.teslo.teslo_shop.product.dto.PlainProductDto;
 import com.teslo.teslo_shop.product.dto.ProductDto;
@@ -116,8 +118,12 @@ public class ProductService {
         return this.mapToDto(savedProduct);
     }
 
-    public List<PlainProductDto> saveMultiple(List<Product> products) {
-        List<Product> savedProducts = this.repository.saveAll(products);
+    public List<PlainProductDto> saveMultiple(List<Product> products, List<User> users) {
+        List<Product> prods = products.stream().map(product -> {
+            product.setUser(users.get(MathUtil.getRandomInteger(users.size())));
+            return product;
+        }).collect(Collectors.toList());
+        List<Product> savedProducts = this.repository.saveAll(prods);
         return savedProducts.stream().map(product -> this.mapToDto(product))
                 .collect(Collectors.toList());
     }

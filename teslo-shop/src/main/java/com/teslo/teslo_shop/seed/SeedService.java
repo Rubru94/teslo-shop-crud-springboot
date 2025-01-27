@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teslo.teslo_shop.auth.AuthService;
+import com.teslo.teslo_shop.auth.dto.CreateUserDto;
+import com.teslo.teslo_shop.auth.entities.User;
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
 import com.teslo.teslo_shop.product.Product;
 import com.teslo.teslo_shop.product.ProductService;
@@ -21,10 +24,12 @@ import com.teslo.teslo_shop.product.ProductService;
 public class SeedService {
 
     private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
+    private final AuthService authService;
     private final ProductService productService;
     private final ObjectMapper objectMapper;
 
-    public SeedService(ProductService productService, ObjectMapper objectMapper) {
+    public SeedService(AuthService authService, ProductService productService, ObjectMapper objectMapper) {
+        this.authService = authService;
         this.productService = productService;
         this.objectMapper = objectMapper;
     }
@@ -37,13 +42,17 @@ public class SeedService {
 
         List<Product> products = this.getJsonDataMap(new TypeReference<Map<String, List<Product>>>() {
         }).get("products");
-        this.productService.saveMultiple(products);
+        List<CreateUserDto> users = this.getJsonDataMap(new TypeReference<Map<String, List<CreateUserDto>>>() {
+        }).get("users");
+        List<User> savedUsers = this.authService.registerMultiple(users);
+        this.productService.saveMultiple(products, savedUsers);
 
         LOGGER.log(Level.INFO, msg);
         return msg;
     }
 
     private void cleanTables() {
+        this.authService.deleteAllUsers();
         this.productService.deleteAll();
     }
 
