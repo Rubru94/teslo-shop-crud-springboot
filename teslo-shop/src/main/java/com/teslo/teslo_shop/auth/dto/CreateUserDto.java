@@ -14,6 +14,10 @@ public class CreateUserDto {
         this.user = user;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public String getEmail() {
         return user.getEmail();
     }

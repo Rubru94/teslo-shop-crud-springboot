@@ -10,6 +10,7 @@ public class AuthenticatedUserDto implements UserInterface {
 
     private User user;
     private String token;
+    private Long expiresIn;
 
     public AuthenticatedUserDto() {
         this.user = new User();
@@ -17,6 +18,16 @@ public class AuthenticatedUserDto implements UserInterface {
 
     public AuthenticatedUserDto(User user) {
         this.user = user;
+    }
+
+    public AuthenticatedUserDto(User user, String token) {
+        this(user);
+        this.token = token;
+    }
+
+    public AuthenticatedUserDto(User user, String token, Long expiresIn) {
+        this(user, token);
+        this.expiresIn = expiresIn;
     }
 
     public AuthenticatedUserDto(CreateUserDto createUserDto) {
@@ -86,5 +97,13 @@ public class AuthenticatedUserDto implements UserInterface {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Long getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
     }
 }
