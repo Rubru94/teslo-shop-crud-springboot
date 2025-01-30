@@ -41,6 +41,10 @@ public class AuthenticatedUserDto implements UserInterface {
         this.token = token;
     }
 
+    public String getId() {
+        return user.getId();
+    }
+
     @Override
     public String getEmail() {
         return user.getEmail();

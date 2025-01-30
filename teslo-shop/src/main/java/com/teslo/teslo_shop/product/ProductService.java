@@ -189,7 +189,7 @@ public class ProductService {
     }
 
     private PlainProductDto mapToDto(Product product) {
-        ProductDto productDto = objectMapper.convertValue(product, ProductDto.class);
+        ProductDto productDto = new ProductDto(product);
         return new PlainProductDto(productDto);
     }
 

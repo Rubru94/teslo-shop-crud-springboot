@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teslo.teslo_shop.auth.entities.User;
+import com.teslo.teslo_shop.product.interfaces.ProductInterface;
 import com.teslo.teslo_shop.product.product_image.ProductImage;
 
 import jakarta.persistence.CascadeType;
@@ -26,7 +27,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements ProductInterface<ProductImage> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -55,11 +56,11 @@ public class Product {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer stock = 0;
 
-    private List<String> sizes;
+    private List<String> sizes = new ArrayList<>();
 
     private String gender;
 
-    private List<String> tags;
+    private List<String> tags = new ArrayList<>();
 
     private String type;
 
@@ -74,86 +75,109 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE) // Specifies an on delete action for a foreign key constraint.
     private User user;
 
+    public Product() {
+    }
+
     public String getId() {
         return id;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public BigDecimal getPrice() {
         return price;
     }
 
+    @Override
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getSlug() {
         return slug;
     }
 
+    @Override
     public void setSlug(String slug) {
         this.slug = slug;
     }
 
+    @Override
     public Integer getStock() {
         return stock;
     }
 
+    @Override
     public void setStock(Integer stock) {
         this.stock = stock;
     }
 
+    @Override
     public List<String> getSizes() {
         return sizes;
     }
 
+    @Override
     public void setSizes(List<String> sizes) {
         this.sizes = sizes;
     }
 
+    @Override
     public String getGender() {
         return gender;
     }
 
+    @Override
     public void setGender(String gender) {
         this.gender = gender;
     }
 
+    @Override
     public List<String> getTags() {
         return tags;
     }
 
+    @Override
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public void setType(String type) {
         this.type = type;
     }
 
+    @Override
     public List<ProductImage> getImages() {
         return images;
     }
 
+    @Override
     public void setImages(List<ProductImage> images) {
         this.images = images;
     }
