@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teslo.teslo_shop.auth.AuthService;
 import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.product.dto.PlainProductDto;
 
@@ -23,9 +24,11 @@ import com.teslo.teslo_shop.product.dto.PlainProductDto;
 public class ProductController {
 
     private final ProductService service;
+    private final AuthService authService;
 
-    public ProductController(ProductService service) {
+    public ProductController(ProductService service, AuthService authService) {
         this.service = service;
+        this.authService = authService;
     }
 
     /*
@@ -48,7 +51,7 @@ public class ProductController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public PlainProductDto create(@RequestBody PlainProductDto entity) {
-        return this.service.save(entity);
+        return this.service.save(entity, this.authService.getJwtUser());
     }
 
     @PatchMapping("/{id}")

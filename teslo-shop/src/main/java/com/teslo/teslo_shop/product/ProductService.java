@@ -12,7 +12,6 @@ import org.springframework.javapoet.ClassName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teslo.teslo_shop.auth.entities.User;
 import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.core.error.exceptions.BadRequestException;
@@ -40,7 +39,6 @@ public class ProductService {
 
     private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
     private final ProductRepository repository;
-    private final ObjectMapper objectMapper;
     private final ProductImageService productImageService;
 
     @PersistenceContext
@@ -48,10 +46,8 @@ public class ProductService {
 
     private CriteriaHelper<Product> criteria;
 
-    public ProductService(ProductRepository repository, ObjectMapper objectMapper,
-            ProductImageService productImageService) {
+    public ProductService(ProductRepository repository, ProductImageService productImageService) {
         this.repository = repository;
-        this.objectMapper = objectMapper;
         this.productImageService = productImageService;
     }
 
@@ -106,15 +102,8 @@ public class ProductService {
         return this.mapToDto(savedProduct);
     }
 
-    public PlainProductDto save(PlainProductDto plainProductDto) {
-        /**
-         * @see
-         *      this conversion works because uses ProductImageDto(String url)
-         *      constructor
-         */
-        ProductDto productDto = objectMapper.convertValue(plainProductDto, ProductDto.class);
-        Product product = objectMapper.convertValue(productDto, Product.class);
-        Product savedProduct = this.repository.save(product);
+    public PlainProductDto save(PlainProductDto plainProductDto, User user) {
+        Product savedProduct = this.repository.save(new Product(plainProductDto, user));
         return this.mapToDto(savedProduct);
     }
 

@@ -80,8 +80,12 @@ public class AuthService {
     }
 
     public User getJwtUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return (User) authentication.getPrincipal();
+        } catch (Exception e) {
+            throw new UnauthorizedException("It has not been possible to obtain the user from jwt token");
+        }
     }
 
     public void deleteAllUsers() {

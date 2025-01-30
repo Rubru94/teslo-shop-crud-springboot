@@ -39,6 +39,11 @@ public class ProductImage {
         this.url = url;
     }
 
+    public ProductImage(String url, Product product) {
+        this(url);
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }

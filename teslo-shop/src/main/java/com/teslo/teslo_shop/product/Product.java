@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teslo.teslo_shop.auth.entities.User;
+import com.teslo.teslo_shop.product.dto.PlainProductDto;
 import com.teslo.teslo_shop.product.interfaces.ProductInterface;
 import com.teslo.teslo_shop.product.product_image.ProductImage;
 
@@ -70,12 +71,26 @@ public class Product implements ProductInterface<ProductImage> {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true) // TODO: nullable false. It is true at the beginning for create
-                                                   // column in table "products"
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE) // Specifies an on delete action for a foreign key constraint.
     private User user;
 
     public Product() {
+    }
+
+    public Product(PlainProductDto product, User user) {
+        this();
+        this.title = product.getTitle();
+        this.price = product.getPrice();
+        this.description = product.getDescription();
+        this.slug = product.getSlug();
+        this.stock = product.getStock();
+        this.sizes = product.getSizes();
+        this.gender = product.getGender();
+        this.tags = product.getTags();
+        this.type = product.getType();
+        this.images = product.getImages().stream().map(url -> new ProductImage(url, this)).collect(Collectors.toList());
+        this.user = user;
     }
 
     public String getId() {
