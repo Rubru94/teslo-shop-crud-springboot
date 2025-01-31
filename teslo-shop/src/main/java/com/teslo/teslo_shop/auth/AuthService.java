@@ -1,12 +1,11 @@
 package com.teslo.teslo_shop.auth;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +14,11 @@ import com.teslo.teslo_shop.auth.dto.AuthenticatedUserDto;
 import com.teslo.teslo_shop.auth.dto.CreateUserDto;
 import com.teslo.teslo_shop.auth.dto.LoginUserDto;
 import com.teslo.teslo_shop.auth.entities.User;
+import com.teslo.teslo_shop.auth.enums.ValidRoles;
+import com.teslo.teslo_shop.core.error.exceptions.AuthorizationDeniedException;
 import com.teslo.teslo_shop.core.error.exceptions.NotFoundException;
 import com.teslo.teslo_shop.core.error.exceptions.UnauthorizedException;
+import com.teslo.teslo_shop.core.utils.SecurityUtil;
 
 @Transactional
 @Service
@@ -81,11 +83,19 @@ public class AuthService {
 
     public User getJwtUser() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            return (User) authentication.getPrincipal();
+            return (User) SecurityUtil.getPrincipal();
         } catch (Exception e) {
             throw new UnauthorizedException("It has not been possible to obtain the user from jwt token");
         }
+    }
+
+    public void verifyRoles(ValidRoles... roles) {
+        List<String> rolesStrings = Arrays.asList(roles).stream().map(ValidRoles::getAuthority)
+                .collect(Collectors.toList());
+        if (!SecurityUtil.hasAnyRole(rolesStrings))
+            throw new AuthorizationDeniedException(
+                    "Invalid role. Access denied. One of the following roles is required: " + rolesStrings + ".");
+        return;
     }
 
     public void deleteAllUsers() {

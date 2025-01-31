@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teslo.teslo_shop.auth.AuthService;
+import com.teslo.teslo_shop.auth.enums.ValidRoles;
 import com.teslo.teslo_shop.core.dto.PaginationDto;
 import com.teslo.teslo_shop.product.dto.PlainProductDto;
 
@@ -48,9 +49,18 @@ public class ProductController {
         return this.service.findOne(term);
     }
 
+    /**
+     * {@code @PreAuthorize} notation implies using SpEL expressions which cannot be
+     * built dynamically with the role string.
+     * 
+     * For this reason it is decided to use a custom implementation with an
+     * auxiliary method {@code verifyRoles} to check user roles.
+     */
+    // @PreAuthorize("hasAuthority('admin')")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public PlainProductDto create(@RequestBody PlainProductDto entity) {
+        this.authService.verifyRoles(ValidRoles.ADMIN, ValidRoles.SUPER_USER);
         return this.service.save(entity, this.authService.getJwtUser());
     }
 

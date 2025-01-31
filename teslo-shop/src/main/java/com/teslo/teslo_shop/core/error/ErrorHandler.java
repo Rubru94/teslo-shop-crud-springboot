@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -33,10 +34,15 @@ public class ErrorHandler {
         return this.handleException(ex, request, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<?> handleAuthorizationDeniedException(Exception ex, WebRequest request) {
+        return this.handleException(ex, request, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGlobalException(Exception ex, WebRequest request) {
 
-        if (ex instanceof BadCredentialsException)
+        if (ex instanceof BadCredentialsException || ex instanceof AuthorizationDeniedException)
             return this.handleException(ex, request, HttpStatus.UNAUTHORIZED);
         if (ex instanceof ExpiredJwtException || ex instanceof SignatureException)
             return this.handleException(ex, request, HttpStatus.FORBIDDEN);
