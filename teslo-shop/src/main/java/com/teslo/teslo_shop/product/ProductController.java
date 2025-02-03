@@ -67,11 +67,13 @@ public class ProductController {
     @PatchMapping("/{id}")
     public PlainProductDto update(@PathVariable String id, @RequestBody PlainProductDto entity)
             throws BadRequestException {
+        this.authService.verifyRoles(ValidRoles.ADMIN, ValidRoles.SUPER_USER);
         return this.service.update(id, entity);
     }
 
     @DeleteMapping("{id}")
     public PlainProductDto delete(@PathVariable String id) {
+        this.authService.verifyRoles(ValidRoles.ADMIN, ValidRoles.SUPER_USER);
         return this.service.delete(id);
     }
 
