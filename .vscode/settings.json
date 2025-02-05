@@ -6,6 +6,11 @@
       "alias": "run",
       "command": "spring-boot:run",
       "debug": false
+    },
+    {
+      "alias": "test",
+      "command": "test",
+      "debug": false
     }
   ]
 }
