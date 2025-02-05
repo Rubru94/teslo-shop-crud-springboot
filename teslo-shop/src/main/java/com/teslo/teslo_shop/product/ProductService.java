@@ -51,6 +51,10 @@ public class ProductService {
         this.productImageService = productImageService;
     }
 
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     /**
      * The {@code @PostConstruct} init method ensures that the {@code EntityManager}
      * has been injected before initialising {@code criteria}

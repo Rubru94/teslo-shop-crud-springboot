@@ -97,6 +97,10 @@ public class Product implements ProductInterface<ProductImage> {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String getTitle() {
         return title;
