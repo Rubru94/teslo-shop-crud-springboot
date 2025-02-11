@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "0459172d-606f-4da7-acbb-2058cfcac6df",
+		"name": "Teslo Shop Springboot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9561143"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "All products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/products",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product by term",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/products/:term",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":term"
+							],
+							"variable": [
+								{
+									"key": "term",
+									"value": "women_raven_joggers"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Image by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/product-images/:id",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"product-images",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2497"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MUBtYWlsLmNvbSIsImlhdCI6MTczODMxNjkyMywiZXhwIjoxNzM4MzE3MjgzfQ.uARiK1BOXIUbrpepq17eCZPJDmJT9LpmhHyqutiRaCo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Example shirt\",\n    \"sizes\": [\n        \"SM\",\n        \"M\",\n        \"L\"\n    ],\n    \"gender\": \"male\",\n    \"slug\": \"example_shirts\",\n    \"price\": 15.99,\n    \"images\": [\n        \"1740176-00-A_0_2000.jpg\", \"1740176-00-A_0_2002.jpg\", \"dasdasdsa\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/products",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MUBtYWlsLmNvbSIsImlhdCI6MTczODU2ODc2OCwiZXhwIjoxNzM4NTY5MTI4fQ.JC77W0noZhbFqJcC2FEjgC8alnibUiV2AWKZrl6PI_8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/products/:id",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39760ac9-6de0-4ac3-824b-ce5547deeb7c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MUBtYWlsLmNvbSIsImlhdCI6MTczODU2ODc2OCwiZXhwIjoxNzM4NTY5MTI4fQ.JC77W0noZhbFqJcC2FEjgC8alnibUiV2AWKZrl6PI_8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Example shirt 11sds\",\n    \"sizes\": [\n        \"SM\",\n        \"M\",\n        \"L\"\n    ],\n    \"gender\": \"male\",\n    \"slug\": \"example_shirts3sds\",\n    \"price\": 15.99,\n    \"images\": [\n        \"1740176-00-A_0_2000.jpg\", \"1740176-00-A_0_2005.jpg\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/products/:id",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "46096b2f-8812-4cde-aee3-f401b8ba7cea"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seed",
+			"item": [
+				{
+					"name": "Populate DB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/seed",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"seed"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.Doe@mail.com\",\n    \"password\": \"Abc123\",\n    \"fullName\": \"John Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/auth/register",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test1@mail.com\",\n    \"password\": \"Abc123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/auth/login",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check auth status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MkBtYWlsLmNvbSIsImlhdCI6MTczODMxNTIxOSwiZXhwIjoxNzM4MzE1NTc5fQ.YzShSIYcksBMK5sMDLf6v76pJpUCOifBEOr4Rz7Jrgw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{teslo-shop-host-dev}}/api/auth/check-status",
+							"host": [
+								"{{teslo-shop-host-dev}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"check-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "teslo-shop-host-dev",
+			"value": "http://localhost:8085",
+			"type": "string"
+		}
+	]
+}
