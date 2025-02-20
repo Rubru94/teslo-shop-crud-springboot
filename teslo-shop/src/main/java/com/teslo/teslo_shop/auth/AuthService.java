@@ -29,8 +29,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthService(
-            AuthenticationManager authManager, UserRepository userRepository,
+    public AuthService(AuthenticationManager authManager, UserRepository userRepository,
             PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.authManager = authManager;
         this.userRepository = userRepository;
@@ -46,8 +45,7 @@ public class AuthService {
     public AuthenticatedUserDto registerUser(CreateUserDto createUserDto) {
         User user = this.createUser(createUserDto);
         this.userRepository.save(user);
-        return new AuthenticatedUserDto(user, this.getJwtToken(user),
-                this.jwtService.getExpirationTime());
+        return new AuthenticatedUserDto(user, this.getJwtToken(user), this.jwtService.getExpirationTime());
     }
 
     public List<User> registerMultiple(List<CreateUserDto> users) {
@@ -61,8 +59,7 @@ public class AuthService {
             throw new UnauthorizedException("Credentials are not valid (password)");
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword()));
-        return new AuthenticatedUserDto(user, this.getJwtToken(user),
-                this.jwtService.getExpirationTime());
+        return new AuthenticatedUserDto(user, this.getJwtToken(user), this.jwtService.getExpirationTime());
     }
 
     /**
@@ -71,14 +68,6 @@ public class AuthService {
     public AuthenticatedUserDto checkAuthStatus(User user) {
         User userSaved = this.findUserByEmail(user.getEmail());
         return new AuthenticatedUserDto(userSaved, this.getJwtToken(userSaved), this.jwtService.getExpirationTime());
-    }
-
-    public String encodePassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
-
-    public boolean checkPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     public User getJwtUser() {
@@ -106,10 +95,17 @@ public class AuthService {
         return this.jwtService.generateToken(user);
     }
 
+    private String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
+
+    private boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
     private User createUser(CreateUserDto createUserDto) {
         User user = new User(createUserDto);
         user.setPassword(this.encodePassword(createUserDto.getPassword()));
         return user;
     }
-
 }

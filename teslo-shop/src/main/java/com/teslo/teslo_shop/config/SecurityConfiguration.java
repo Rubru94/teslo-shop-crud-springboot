@@ -31,21 +31,6 @@ public class SecurityConfiguration {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    /**
-     * Handle csrf authorized request
-     */
-    /*
-     * @Bean
-     * SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-     * http
-     * .csrf(csrf -> csrf.disable())
-     * .authorizeHttpRequests(authz -> authz
-     * .anyRequest().permitAll() // Allow access to any endpoint
-     * );
-     * return http.build();
-     * }
-     */
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

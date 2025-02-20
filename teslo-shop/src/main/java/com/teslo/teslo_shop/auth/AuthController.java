@@ -37,5 +37,4 @@ public class AuthController {
     public AuthenticatedUserDto checkAuthStatus() {
         return this.service.checkAuthStatus(this.service.getJwtUser());
     }
-
 }
