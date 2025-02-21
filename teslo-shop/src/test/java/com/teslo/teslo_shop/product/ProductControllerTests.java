@@ -99,6 +99,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.title").value(product.getTitle()));
 
         verify(authService, times(1)).verifyRoles(ValidRoles.ADMIN, ValidRoles.SUPER_USER);
+        verify(authService, times(1)).getJwtUser();
         verify(productService, times(1)).save(any(PlainProductDto.class), any());
     }
 
