@@ -16,6 +16,11 @@
       "alias": "test",
       "command": "test",
       "debug": false
+    },
+    {
+      "alias": "package skipping tests",
+      "command": "clean install -DskipTests", // or mvn clean install -Dmaven.test.skip=true
+      "debug": false
     }
   ]
 }

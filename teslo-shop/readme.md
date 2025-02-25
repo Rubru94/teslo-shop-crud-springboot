@@ -48,6 +48,9 @@
 - [Implement JWT authentication in a Spring Boot application](https://medium.com/@tericcabrel/implement-jwt-authentication-in-a-spring-boot-3-application-5839e4fd8fac)
 - [Spring Security with Database for User account and Roles](https://medium.com/@prasanta-paul/spring-security-with-database-for-user-account-and-roles-ec3c7540db6e)
 - [VsCode - Java formatting and linting](https://code.visualstudio.com/docs/java/java-linting)
+- [Creating a Dockerfile for a Spring Boot Application](https://medium.com/@vitthalchandankar2/creating-a-dockerfile-for-a-spring-boot-application-a-step-by-step-guide-237e84bb37b6)
+- [Using Docker Compose with Spring Boot and PostgreSQL](https://medium.com/@saygiligozde/using-docker-compose-with-spring-boot-and-postgresql-235031106f9f)
+- [Spring how to use an application.yml file in a Docker container](https://stackoverflow.com/questions/74923999/how-do-i-get-spring-to-use-an-application-yml-file-in-a-docker-container)
 
 ---
 

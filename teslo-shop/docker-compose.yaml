@@ -1,6 +1,26 @@
-version: '3'
+version: "3"
 
 services:
+  app:
+    image: docker-teslo-shop-app:latest
+    build:
+      context: .
+    container_name: teslo-shop-app
+    depends_on:
+      - db
+    environment: # The SPRING_* environment variables set the corresponding spring.* properties and override the application.yaml file.
+      # SERVER_PORT: ${SERVER_PORT}
+      # SPRING_PROFILES_ACTIVE: ${STAGE}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:${DB_PORT}/${DB_NAME}
+      # SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      # SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      # SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # SECURITY_JWT_SECRET-KEY: ${JWT_SECRET}
+      # SECURITY_JWT_EXPIRATION-TIME: ${JWT_EXPIRATION_TIME}
+
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT} # binding --> local port : container port
+
   db:
     image: postgres:14.3
     restart: always
