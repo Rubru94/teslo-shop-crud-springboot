@@ -5,6 +5,7 @@ services:
     image: docker-teslo-shop-app:latest
     build:
       context: .
+      dockerfile: ./Dockerfile.latest-jar
     container_name: teslo-shop-app
     depends_on:
       - db
